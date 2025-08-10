@@ -112,6 +112,7 @@ if (googlesignup) {
             const user = result.user;
             console.log("User Info:", user);
             alert(`Welcome ${user.displayName}!`);
+            window.location.href='index.html'
         } catch (error) {
             console.error("Error:", error);
             alert(error.message);
