@@ -1,5 +1,5 @@
 import { initializeApp } from "https://www.gstatic.com/firebasejs/12.1.0/firebase-app.js";
-import { getAuth, createUserWithEmailAndPassword, signInWithEmailAndPassword, onAuthStateChanged, signOut } from "https://www.gstatic.com/firebasejs/12.1.0/firebase-auth.js";
+import { getAuth, createUserWithEmailAndPassword, signInWithEmailAndPassword, onAuthStateChanged, signOut, GoogleAuthProvider, signInWithPopup } from "https://www.gstatic.com/firebasejs/12.1.0/firebase-auth.js";
 import { getFirestore, collection, addDoc, getDoc, getDocs, doc, updateDoc, deleteDoc } from "https://www.gstatic.com/firebasejs/12.1.0/firebase-firestore.js";
 
 
@@ -96,6 +96,27 @@ if (logout) {
                 console.error("Error signing out:", error);
             });
     })
+}
+
+
+// Google Auth Provider
+const provider = new GoogleAuthProvider();
+
+// Button Click
+let googlesignup = document.getElementById("googleBtn")
+if (googlesignup) {
+
+    googlesignup.addEventListener("click", async () => {
+        try {
+            const result = await signInWithPopup(auth, provider);
+            const user = result.user;
+            console.log("User Info:", user);
+            alert(`Welcome ${user.displayName}!`);
+        } catch (error) {
+            console.error("Error:", error);
+            alert(error.message);
+        }
+    });
 }
 
 // List of public pages (no login required)
