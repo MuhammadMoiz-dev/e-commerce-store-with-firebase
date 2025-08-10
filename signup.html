@@ -1,0 +1,148 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Shopping.com/signup</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <link rel="shortcut icon" href="icon.png" type="image/x-icon">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css"/>
+</head>
+<body class="bg-gray-50">
+
+<!-- Navigation Bar -->
+<nav class="bg-white shadow-lg">
+  <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+    <div class="flex justify-between h-16">
+      <div class="flex">
+        <!-- Logo -->
+        <div class="flex-shrink-0 flex items-center">
+          <a href="index.html" class="text-xl font-bold text-indigo-600">Shopping.com</a>
+        </div>
+      </div>
+
+      <!-- Right Side -->
+      <div class="hidden sm:ml-6 sm:flex sm:items-center">
+        <div class="ml-4 flex items-center space-x-4">
+          <span class="px-3 py-2 text-sm text-gray-900">Already have an account?</span>
+          <a href="login.html" class="px-3 py-2 text-sm font-medium text-white bg-indigo-600 hover:bg-indigo-700 rounded-md">Login</a>
+        </div>
+      </div>
+
+      <!-- Mobile menu button -->
+      <div class="-mr-2 flex items-center sm:hidden">
+        <button type="button" class="inline-flex items-center justify-center p-2 rounded-md text-gray-400 hover:text-gray-500 hover:bg-gray-100 focus:outline-none focus:ring-2 focus:ring-inset focus:ring-indigo-500">
+          <span class="sr-only">Open main menu</span>
+          <i class="fas fa-bars block h-6 w-6"></i>
+        </button>
+      </div>
+    </div>
+  </div>
+</nav>
+
+<!-- Signup Section -->
+<div class="min-h-screen flex items-center justify-center py-12 px-4 sm:px-6 lg:px-8">
+  <div class="max-w-md w-full space-y-8 bg-white p-10 rounded-lg shadow-xl">
+    <div>
+      <h2 class="mt-6 text-center text-3xl font-extrabold text-gray-900">
+        Create your account
+      </h2>
+      <p class="mt-2 text-center text-sm text-gray-600">
+        Or
+        <a href="login.html" class="font-medium text-indigo-600 hover:text-indigo-500">
+          sign in to your account
+        </a>
+      </p>
+    </div>
+
+    <!-- Signup Form -->
+    <div class="mt-8 space-y-6" action="#" method="POST">
+      <div class="space-y-4">
+       
+
+        <!-- Email Field -->
+        <div>
+          <label  for="email-address" class="sr-only">Email address</label>
+          <div class="relative">
+            <div class="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
+              <i class="fas fa-envelope text-gray-400"></i>
+            </div>
+            <input id="semail" name="email" type="email" autocomplete="email" required class="block w-full pl-10 pr-3 py-3 border border-gray-300 rounded-md focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm" placeholder="Email address"/>
+          </div>
+        </div>
+
+        <!-- Password Field -->
+        <div>
+          <label for="password" class="sr-only">Password</label>
+          <div class="relative">
+            <div class="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
+              <i class="fas fa-lock text-gray-400"></i>
+            </div>
+            <input id="spassword" name="password" type="password" autocomplete="new-password" required class="block w-full pl-10 pr-3 py-3 border border-gray-300 rounded-md focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm" placeholder="Password"/>
+          </div>
+        </div>
+
+        
+      </div>
+
+      <!-- Submit Button -->
+      <div>
+        <button id="sbtn" type="submit" class="group relative w-full flex justify-center py-3 px-4 border border-transparent text-sm font-medium rounded-md text-white bg-indigo-600 hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500">
+          <span class="absolute left-0 inset-y-0 flex items-center pl-3">
+            <i class="fas fa-user-plus text-indigo-300 group-hover:text-indigo-200"></i>
+          </span>
+          Sign Up
+        </button>
+      </div>
+    </div>
+
+    <!-- Divider -->
+    <div class="relative">
+      <div class="absolute inset-0 flex items-center">
+        <div class="w-full border-t border-gray-300"></div>
+      </div>
+      <div class="relative flex justify-center text-sm">
+        <span class="px-2 bg-white text-gray-500">Or continue with</span>
+      </div>
+    </div>
+
+    <!-- Social Signup Buttons -->
+    <div class="grid grid-cols-3 gap-3">
+      <a href="#" class="w-full inline-flex justify-center py-2 px-4 border border-gray-300 rounded-md bg-white text-sm font-medium text-gray-500 hover:bg-gray-50">
+        <i class="fab fa-facebook-f text-blue-600"></i>
+      </a>
+      <a href="#" class="w-full inline-flex justify-center py-2 px-4 border border-gray-300 rounded-md bg-white text-sm font-medium text-gray-500 hover:bg-gray-50">
+        <i class="fab fa-google text-red-600"></i>
+      </a>
+      <a href="#" class="w-full inline-flex justify-center py-2 px-4 border border-gray-300 rounded-md bg-white text-sm font-medium text-gray-500 hover:bg-gray-50">
+        <i class="fab fa-apple text-gray-900"></i>
+      </a>
+    </div>
+  </div>
+</div>
+
+<!-- Footer (same as before) -->
+<footer class="bg-white">
+  <div class="max-w-7xl mx-auto py-12 px-4 sm:px-6 lg:py-16 lg:px-8">
+    <div class="grid grid-cols-2 gap-8 md:grid-cols-4">
+      <!-- Repeat your footer sections here (Shop, Company, Support, Legal) -->
+      <!-- ... same as your previous footer ... -->
+    </div>
+    <div class="mt-12 border-t border-gray-200 pt-8">
+      <div class="md:flex md:items-center md:justify-between">
+        <div class="flex space-x-6 md:order-2">
+          <a href="#" class="text-gray-400 hover:text-gray-500"><i class="fab fa-facebook-f"></i></a>
+          <a href="#" class="text-gray-400 hover:text-gray-500"><i class="fab fa-instagram"></i></a>
+          <a href="#" class="text-gray-400 hover:text-gray-500"><i class="fab fa-twitter"></i></a>
+          <a href="#" class="text-gray-400 hover:text-gray-500"><i class="fab fa-pinterest"></i></a>
+        </div>
+        <p class="mt-8 text-base text-gray-400 md:mt-0 md:order-1">
+          &copy; 2023 Shopping.com. All rights reserved.
+        </p>
+      </div>
+    </div>
+  </div>
+</footer>
+<script type="module" src="app.js"></script>
+</body>
+</html>

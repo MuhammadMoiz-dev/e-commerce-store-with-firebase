@@ -1,0 +1,132 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Dashboard - Shopping.com</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="shortcut icon" href="icon.png" type="image/x-icon">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+</head>
+
+<body class="bg-gray-50">
+
+    <!-- Top Navbar -->
+    <nav class="bg-white shadow-lg">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="flex justify-between h-16">
+                <div class="flex items-center">
+                    <a href="index.html" class="text-xl font-bold text-indigo-600">Shopping.com</a>
+                </div>
+                <div class="flex items-center space-x-4">
+                    <button id="logout" class="cursor px-3 py-2 rounded-md text-sm font-medium text-white bg-indigo-600 hover:bg-indigo-700">LogOut</button>
+                </div>
+            </div>
+        </div>
+    </nav>
+
+    <!-- Dashboard Content -->
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
+        <div class="flex justify-between items-center mb-6">
+            <h1 class="text-2xl font-bold text-gray-800">Dashboard</h1>
+            <button id="openModal" class="bg-indigo-600 text-white px-4 py-2 rounded hover:bg-indigo-700">
+                <i class="fas fa-plus mr-2"></i>Add Product
+            </button>
+        </div>
+        <div id="productcards" class="flex w-full flex-wrap gap-5"></div>
+
+        <!-- Popup Modal -->
+        <div id="productModal" class="fixed inset-0 bg-black bg-opacity-50 hidden justify-center items-center">
+            <div class="bg-white rounded-lg shadow-lg w-full max-w-lg p-6 relative">
+                <h2 class="text-xl font-bold mb-4">Add New Product</h2>
+
+                <div class="space-y-4">
+                    <div>
+                        <label class="block text-gray-700">Product Name</label>
+                        <input id="ProductName" type="text" class="w-full border border-gray-300 rounded px-3 py-2"
+                            placeholder="Enter product name">
+                    </div>
+                    <div>
+                        <label class="block text-gray-700">Product Details</label>
+                        <input id="ProductDetails" type="text" class="w-full border border-gray-300 rounded px-3 py-2"
+                            placeholder="Enter product Details">
+                    </div>
+
+                    <div>
+                        <label class="block text-gray-700">Price</label>
+                        <input id="ProductPrice" type="number" class="w-full border border-gray-300 rounded px-3 py-2"
+                            placeholder="Enter price">
+                    </div>
+                    <div>
+                        <label class="block text-gray-700">Image URL</label>
+                        <input id="ProductImage" type="text" class="w-full border border-gray-300 rounded px-3 py-2"
+                            placeholder="Enter image URL">
+                    </div>
+
+                    <div class="flex justify-end space-x-3">
+                        <button type="button" id="closeModal"
+                            class="px-4 py-2 border rounded text-gray-600 hover:bg-gray-100">Cancel</button>
+                        <button id="Addproduct"
+                            class="px-4 py-2 bg-indigo-600 text-white rounded hover:bg-indigo-700">Add Product</button>
+                    </div>
+                </div>
+
+                <!-- <button id="closeModalX" class="absolute top-3 right-3 text-gray-500 hover:text-gray-700">
+                    <i class="fas fa-times"></i>
+                </button> -->
+            </div>
+        </div>
+        <!-- edit form -->
+
+        <div id="editModal" class="fixed inset-0 bg-black bg-opacity-50 hidden justify-center items-center">
+            <div class="bg-white rounded-lg shadow-lg w-full max-w-lg p-6 relative">
+                <h2 class="text-xl font-bold mb-4">Add New Product</h2>
+
+                <div class="space-y-4">
+                    <div>
+                        <label class="block text-gray-700">Product Name</label>
+                        <input id="editName" type="text" class="w-full border border-gray-300 rounded px-3 py-2"
+                            placeholder="Enter product name">
+                    </div>
+                    <div>
+                        <label class="block text-gray-700">Product Details</label>
+                        <input id="editDetails" type="text" class="w-full border border-gray-300 rounded px-3 py-2"
+                            placeholder="Enter product Details">
+                    </div>
+
+                    <div>
+                        <label class="block text-gray-700">Price</label>
+                        <input id="editPrice" type="number" class="w-full border border-gray-300 rounded px-3 py-2"
+                            placeholder="Enter price">
+                    </div>
+                    <div>
+                        <label class="block text-gray-700">Image URL</label>
+                        <input id="editImage" type="text" class="w-full border border-gray-300 rounded px-3 py-2"
+                            placeholder="Enter image URL">
+                    </div>
+
+                    <div class="flex justify-end space-x-3">
+                        <button type="button" id="editformclose"
+                            class="px-4 py-2 border rounded text-gray-600 hover:bg-gray-100">Cancel</button>
+                        <button id="Updateproduct"
+                            class="px-4 py-2 bg-indigo-600 text-white rounded hover:bg-indigo-700">Add Product</button>
+                    </div>
+                </div>
+
+            </div>
+        </div>
+        <script type="module" src="app.js"></script>
+        <script>
+            const openModal = document.getElementById("openModal");
+            const closeModal = document.getElementById("closeModal");
+            const modal = document.getElementById("productModal");
+
+            openModal.addEventListener("click", () => modal.classList.remove("hidden"));
+            openModal.addEventListener("click", () => modal.classList.add("flex"));
+            closeModal.addEventListener("click", () => modal.classList.add("hidden"));
+        </script>
+
+</body>
+
+</html>
