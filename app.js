@@ -112,7 +112,7 @@ if (googlesignup) {
             const user = result.user;
             console.log("User Info:", user);
             alert(`Welcome ${user.displayName}!`);
-            window.location.href='index.html'
+            window.location.href = 'index.html'
         } catch (error) {
             console.error("Error:", error);
             alert(error.message);
@@ -191,7 +191,7 @@ if (productshow) {
     <div
     class="group relative bg-white p-4 rounded-lg shadow-sm hover:shadow-md transition-shadow duration-300">
     <div
-    class="w-full min-h-80 bg-gray-200 aspect-w-1 aspect-h-1 rounded-md overflow-hidden group-hover:opacity-75 lg:h-80 lg:aspect-none">
+    class="w-full min-h-80 bg-gray-200 aspect-w-1 aspect-h-1 rounded-md overflow-hidden  lg:h-80 lg:aspect-none">
     <img src="${productdata.ProductImage}"
     alt="Front of men's Basic Tee in black."
     class="w-full h-full object-center object-cover lg:w-full lg:h-full">
@@ -206,10 +206,11 @@ if (productshow) {
     <p class="text-sm font-medium text-gray-900">${productdata.ProductPrice}$</p>
     </div>
     <div class="mt-4">
-    <button
-    class="w-full bg-indigo-600 border border-transparent rounded-md py-2 px-4 flex items-center justify-center text-base font-medium text-white hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500 cursor-pointer">
+    <button onclick="addtocard('${doc.id}')"
+    style="cursor: pointer; position: relative; z-index: 999;"
+    class="w-full bg-indigo-600 border border-transparent rounded-md py-2 px-4 flex items-center justify-center text-base font-medium text-white hover:bg-indigo-700 focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500 cursor-pointer">
     Add To Cart
-    </button>
+</button>
     </div>
     </div>`
     });
@@ -292,8 +293,8 @@ async function edit(eid) {
         alert("No such product found!");
     }
 }
-
 window.edit = edit
+// update data
 let Updatebtn = document.getElementById('Updateproduct');
 if (Updatebtn) {
     let editName = document.getElementById('editName');
@@ -325,5 +326,20 @@ if (editformclose) {
     })
 
 }
-
+let productcount = 0
+window.addtocard = async function (id) {
+    let cartCount = document.getElementById('cartCount')
+    cartCount.innerHTML = productcount
+    console.log("Added to cart:", id);
+    try {
+        const docRef = await addDoc(collection(db, "addtocart"), {
+            productid:id,
+            UserId
+        });
+        alert('Product add successful');
+        window.location.reload();
+    } catch (e) {
+        alert(`Error adding document: ${e}`);
+    }
+};
 
