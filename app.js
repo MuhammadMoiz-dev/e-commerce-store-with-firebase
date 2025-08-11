@@ -329,17 +329,53 @@ if (editformclose) {
 let productcount = 0
 window.addtocard = async function (id) {
     let cartCount = document.getElementById('cartCount')
-    cartCount.innerHTML = productcount
+    cartCount.innerHTML = productcount + 1
     console.log("Added to cart:", id);
     try {
         const docRef = await addDoc(collection(db, "addtocart"), {
-            productid:id,
+            productid: id,
             UserId
         });
         alert('Product add successful');
-        window.location.reload();
+        // window.location.reload();
     } catch (e) {
         alert(`Error adding document: ${e}`);
     }
 };
+// cart item
+// let cartitem = document.getElementById('cartitem')
+// if (cartitem) {
+//     let cartuserid;
+//     let cartproductid;
+//     const querySnapshot = await getDocs(collection(db, "addtocart"));
+//     querySnapshot.forEach((doc) => {
+//         let productdata = doc.data();
+//         cartuserid = productdata.UserId
+//         cartproductid = productdata.productid
 
+//     })
+    
+    
+//     const productget = await getDocs(collection(db, "Product"));
+//     productget.forEach((doc) => {
+//         let productdata = doc.data();
+//         if(cartuserid==UserId||cartproductid==doc.id){
+
+//             cartitem.innerHTML = `
+//             <div class="flex items-center justify-between border-b pb-4">
+//             <div class="flex items-center space-x-4">
+//             <img src="https://images.unsplash.com/photo-1505740420928-5e560c06d30e?auto=format&fit=crop&w=150&q=80" alt="Product" class="w-20 h-20 rounded object-cover">
+//             <div>
+//             <h2 class="text-lg font-semibold text-gray-900">Wireless Headphones</h2>
+//             <p class="text-sm text-gray-500">Category: Electronics</p>
+//             <p class="text-sm text-gray-700 font-semibold">$99.00</p>
+//             </div>
+//             </div>
+//             <div class="flex items-center space-x-4">
+//             <input type="number" value="1" min="1" class="w-16 border rounded p-1 text-center">
+//             <button class="text-red-500 hover:text-red-700"><i class="fas fa-trash"></i></button>
+//             </div>
+//             </div>`
+//             }
+//     })
+// }
