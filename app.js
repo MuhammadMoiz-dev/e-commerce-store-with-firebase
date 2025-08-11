@@ -214,43 +214,46 @@ if (productshow) {
     </div>`
     });
 }
-let productcards = document.getElementById('productcards')
+let productcards = document.getElementById('productcards');
+
+// Assume that you have the current user's ID available (e.g., from Firebase Authentication)
+
 if (productcards) {
 
     const querySnapshot = await getDocs(collection(db, "Product"));
+
     querySnapshot.forEach((doc) => {
-        let productdata = doc.data()
-        productcards.innerHTML += ` 
-        <div
-            class="w-[20vw] bg-white rounded-lg border border-gray-200 shadow-md hover:shadow-lg transition-shadow duration-100">
-            <a href="#">
-                <img class="rounded-t-lg w-full h-56 object-cover" src="${productdata.ProductImage}" alt="Product Image">
-            </a>
-            <div class="p-4">
+        let productdata = doc.data();
+
+        // Check if the product's UserId matches the current logged-in user's UserId
+        if (productdata.UserId === UserId) {
+            productcards.innerHTML += ` 
+            <div id="${doc.id}" class="w-[20vw] bg-white rounded-lg border border-gray-200 shadow-md hover:shadow-lg transition-shadow duration-100">
                 <a href="#">
-                    <h5 class="text-lg font-semibold tracking-tight text-gray-900 hover:text-blue-600">
-                        ${productdata.ProductName}
-                    </h5>
+                    <img class="rounded-t-lg w-full h-56 object-cover" src="${productdata.ProductImage}" alt="Product Image">
                 </a>
+                <div class="p-4">
+                    <a href="#">
+                        <h5 class="text-lg font-semibold tracking-tight text-gray-900 hover:text-blue-600">
+                            ${productdata.ProductName}
+                        </h5>
+                    </a>
 
-                <div class="flex items-center justify-between">
-                    <span class="text-2xl font-bold text-gray-900">${productdata.ProductPrice}$</span>
+                    <div class="flex items-center justify-between">
+                        <span class="text-2xl font-bold text-gray-900">${productdata.ProductPrice}$</span>
+                    </div>
+                    <div class="flex gap-2 mt-3">
+                        <button onclick="edit('${doc.id}')" id='updatebtn' class="flex-1 text-white bg-blue-500 hover:bg-blue-600 font-medium rounded-lg text-sm px-4 py-2">
+                            Edit
+                        </button>
+                        <button onclick="del('${doc.id}')" class="flex-1 text-white bg-red-600 hover:bg-red-700 font-medium rounded-lg text-sm px-4 py-2">
+                            Delete
+                        </button>
+                    </div>
                 </div>
-                <div class="flex gap-2 mt-3">
-                    <button onclick="edit('${doc.id}')"
-                    id='updatebtn'
-                        class="flex-1 text-white bg-blue-500 hover:bg-blue-600 font-medium rounded-lg text-sm px-4 py-2">
-                        Edit
-                    </button>
-                    <button onclick="del('${doc.id}')"
-    class="flex-1 text-white bg-red-600 hover:bg-red-700 font-medium rounded-lg text-sm px-4 py-2">
-    Delete
-</button>
-                 </div>
             </div>
-        </div>
-`
-
+            `;
+        }
     });
 }
 
