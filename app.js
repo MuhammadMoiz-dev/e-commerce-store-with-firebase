@@ -1,8 +1,25 @@
 import { initializeApp } from "https://www.gstatic.com/firebasejs/12.1.0/firebase-app.js";
-import { getAuth, createUserWithEmailAndPassword, signInWithEmailAndPassword, onAuthStateChanged, signOut, GoogleAuthProvider, signInWithPopup } from "https://www.gstatic.com/firebasejs/12.1.0/firebase-auth.js";
-import { getFirestore, collection, addDoc, getDoc, getDocs, doc, updateDoc, deleteDoc } from "https://www.gstatic.com/firebasejs/12.1.0/firebase-firestore.js";
+import { 
+    getAuth, 
+    createUserWithEmailAndPassword, 
+    signInWithEmailAndPassword, 
+    onAuthStateChanged, 
+    signOut, 
+    GoogleAuthProvider, 
+    signInWithPopup 
+} from "https://www.gstatic.com/firebasejs/12.1.0/firebase-auth.js";
+import { 
+    getFirestore, 
+    collection, 
+    addDoc, 
+    getDoc, 
+    getDocs, 
+    doc, 
+    updateDoc, 
+    deleteDoc 
+} from "https://www.gstatic.com/firebasejs/12.1.0/firebase-firestore.js";
 
-
+// Firebase config
 const firebaseConfig = {
     apiKey: "AIzaSyCn3ogWlNH1TkxuJJae8irIGp9Fon-IoU4",
     authDomain: "shopping-c8327.firebaseapp.com",
@@ -13,67 +30,52 @@ const firebaseConfig = {
     measurementId: "G-SW78KSGN7T"
 };
 
+// Initialize Firebase
 const app = initializeApp(firebaseConfig);
 const auth = getAuth(app);
 const db = getFirestore(app);
 
-// SIGNUP CODE
-let getsbtn = document.getElementById('sbtn')
+let UserId = null;
+
+// ========================== SIGN UP ==========================
+let getsbtn = document.getElementById('sbtn');
 if (getsbtn) {
-    let email = document.getElementById('semail')
-    let password = document.getElementById('spassword')
     getsbtn.addEventListener('click', () => {
+        let email = document.getElementById('semail').value.trim();
+        let password = document.getElementById('spassword').value.trim();
 
-        createUserWithEmailAndPassword(auth, email.value, password.value)
-            .then((userCredential) => {
-                const user = userCredential.user;
-                alert('Signup Successful')
-                window.location.href = 'login.html'
-                email.value = ""
-                password.value = ""
-
+        createUserWithEmailAndPassword(auth, email, password)
+            .then(() => {
+                alert('Signup Successful');
+                window.location.href = 'login.html';
             })
-            .catch((error) => {
-                email.value = ""
-                password.value = ""
-                alert(error.message)
-            });
-    })
+            .catch((error) => alert(error.message));
+    });
 }
 
-// SIGN IN CODE
-let getlbtn = document.getElementById('lbtn')
+// ========================== SIGN IN ==========================
+let getlbtn = document.getElementById('lbtn');
 if (getlbtn) {
     getlbtn.addEventListener('click', () => {
-        let email = document.getElementById('lemail').value
-        let password = document.getElementById('lpassword').value
+        let email = document.getElementById('lemail').value.trim();
+        let password = document.getElementById('lpassword').value.trim();
+
         signInWithEmailAndPassword(auth, email, password)
-            .then((userCredential) => {
-                const user = userCredential.user;
-                alert('Login Successful')
-                window.location.href = 'index.html'
-                email = ""
-                password = ""
+            .then(() => {
+                alert('Login Successful');
+                window.location.href = 'index.html';
             })
-            .catch((error) => {
-                alert(error)
-                email = ""
-                password = ""
-            });
-    })
+            .catch((error) => alert(error.message));
+    });
 }
 
-let UserId;
-// CHECK USER LOGIN OR NOT
-
+// ========================== AUTH STATE CHECK ==========================
 document.addEventListener("DOMContentLoaded", () => {
     onAuthStateChanged(auth, (user) => {
         if (user) {
-            const uid = user.uid;
-            UserId = uid;
+            UserId = user.uid;
             const dashboard = document.getElementById('dashboard');
             const loginBtns = document.getElementById('loginbtns');
-
             if (dashboard && loginBtns) {
                 dashboard.style.display = 'flex';
                 loginBtns.style.display = 'none';
@@ -82,96 +84,66 @@ document.addEventListener("DOMContentLoaded", () => {
     });
 });
 
-// LOGOUT CODE
-let logout = document.getElementById('logout')
+// ========================== LOGOUT ==========================
+let logout = document.getElementById('logout');
 if (logout) {
     logout.addEventListener('click', () => {
-
         signOut(auth)
             .then(() => {
                 alert("User signed out successfully.");
-                window.location.href = 'index.html'
+                window.location.href = 'index.html';
             })
-            .catch((error) => {
-                console.error("Error signing out:", error);
-            });
-    })
+            .catch((error) => console.error("Error signing out:", error));
+    });
 }
 
-
-// Google Auth Provider
+// ========================== GOOGLE LOGIN ==========================
 const provider = new GoogleAuthProvider();
-
-// Button Click
-let googlesignup = document.getElementById("googleBtn")
+let googlesignup = document.getElementById("googleBtn");
 if (googlesignup) {
-
     googlesignup.addEventListener("click", async () => {
         try {
             const result = await signInWithPopup(auth, provider);
             const user = result.user;
-            console.log("User Info:", user);
             alert(`Welcome ${user.displayName}!`);
-            window.location.href = 'index.html'
+            window.location.href = 'index.html';
         } catch (error) {
-            console.error("Error:", error);
             alert(error.message);
         }
     });
 }
 
-// List of public pages (no login required)
+// ========================== PAGE ACCESS CONTROL ==========================
 const publicPages = ["index.html", "signup.html", "login.html"];
-
-// Get current page filename
 const currentPage = window.location.pathname.split("/").pop();
-
 onAuthStateChanged(auth, (user) => {
-    if (!user) {
-        // User is NOT logged in
-        if (!publicPages.includes(currentPage)) {
-            // Redirect to login if trying to access a restricted page
-            window.location.href = "login.html";
-        }
+    if (!user && !publicPages.includes(currentPage)) {
+        window.location.href = "login.html";
     }
 });
 
-// PRODUCT ADD ON FIRESTORE DATABASE
+// ========================== ADD PRODUCT ==========================
 let getAddproductbtn = document.getElementById('Addproduct');
-
 if (getAddproductbtn) {
     getAddproductbtn.addEventListener('click', async () => {
-
-        let ProductNameEl = document.getElementById('ProductName');
-        let ProductDetailsEl = document.getElementById('ProductDetails');
-        let ProductPriceEl = document.getElementById('ProductPrice');
-        let ProductImageEl = document.getElementById('ProductImage');
-
-        let ProductName = ProductNameEl.value.trim();
-        let ProductDetails = ProductDetailsEl.value.trim();
-        let ProductPrice = ProductPriceEl.value.trim();
-        let ProductImage = ProductImageEl.value.trim();
+        let ProductName = document.getElementById('ProductName').value.trim();
+        let ProductDetails = document.getElementById('ProductDetails').value.trim();
+        let ProductPrice = document.getElementById('ProductPrice').value.trim();
+        let ProductImage = document.getElementById('ProductImage').value.trim();
 
         if (ProductName && ProductDetails && ProductPrice && ProductImage) {
             try {
-                const docRef = await addDoc(collection(db, "Product"), {
+                await addDoc(collection(db, "Product"), {
                     UserId,
                     ProductName,
                     ProductDetails,
                     ProductPrice,
                     ProductImage,
                 });
-                alert('Product add successful');
-
-                // Clear fields after success
-                ProductNameEl.value = '';
-                ProductDetailsEl.value = '';
-                ProductPriceEl.value = '';
-                ProductImageEl.value = '';
-
+                alert('Product added successfully');
                 window.location.reload();
             } catch (e) {
-                alert(`Error adding document: ${e}`);
+                alert(`Error adding product: ${e}`);
             }
         } else {
             alert('Please fill all fields');
@@ -179,203 +151,167 @@ if (getAddproductbtn) {
     });
 }
 
-
-
-let productshow = document.getElementById('productshow')
+// ========================== SHOW ALL PRODUCTS ==========================
+let productshow = document.getElementById('productshow');
 if (productshow) {
-
     const querySnapshot = await getDocs(collection(db, "Product"));
-    querySnapshot.forEach((doc) => {
-        let productdata = doc.data()
+    querySnapshot.forEach((docSnap) => {
+        let productdata = docSnap.data();
         productshow.innerHTML += `
-    <div
-    class="group relative bg-white p-4 rounded-lg shadow-sm hover:shadow-md transition-shadow duration-300">
-    <div
-    class="w-full min-h-80 bg-gray-200 aspect-w-1 aspect-h-1 rounded-md overflow-hidden  lg:h-80 lg:aspect-none">
-    <img src="${productdata.ProductImage}"
-    alt="Front of men's Basic Tee in black."
-    class="w-full h-full object-center object-cover lg:w-full lg:h-full">
-    </div>
-    <div class="mt-4 flex justify-between">
-    <div>
-    <h1 class="text-sm text-gray-700">
-    <span aria-hidden="true" class="absolute inset-0"></span>
-    ${productdata.ProductName}
-    </h1>
-    </div>
-    <p class="text-sm font-medium text-gray-900">${productdata.ProductPrice}$</p>
-    </div>
-    <div class="mt-4">
-    <button onclick="addtocard('${doc.id}')"
-    style="cursor: pointer; position: relative; z-index: 999;"
-    class="w-full bg-indigo-600 border border-transparent rounded-md py-2 px-4 flex items-center justify-center text-base font-medium text-white hover:bg-indigo-700 focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500 cursor-pointer">
-    Add To Cart
-</button>
-    </div>
-    </div>`
+        <div class="group relative bg-white p-4 rounded-lg shadow-sm hover:shadow-md transition-shadow duration-300">
+            <div class="w-full min-h-80 bg-gray-200 rounded-md overflow-hidden">
+                <img src="${productdata.ProductImage}" class="w-full h-full object-cover">
+            </div>
+            <div class="mt-4 flex justify-between">
+                <h1 class="text-sm text-gray-700">${productdata.ProductName}</h1>
+                <p class="text-sm font-medium text-gray-900">${productdata.ProductPrice}$</p>
+            </div>
+            <div class="mt-4">
+                <button onclick="addtocard('${docSnap.id}')" class="w-full bg-indigo-600 rounded-md py-2 px-4 text-white">
+                    Add To Cart
+                </button>
+            </div>
+        </div>`;
     });
 }
+
+// ========================== SHOW USER PRODUCTS (DASHBOARD) ==========================
 let productcards = document.getElementById('productcards');
-
-// Assume that you have the current user's ID available (e.g., from Firebase Authentication)
-
 if (productcards) {
-
     const querySnapshot = await getDocs(collection(db, "Product"));
-
-    querySnapshot.forEach((doc) => {
-        let productdata = doc.data();
-
-        // Check if the product's UserId matches the current logged-in user's UserId
+    querySnapshot.forEach((docSnap) => {
+        let productdata = docSnap.data();
         if (productdata.UserId === UserId) {
-            productcards.innerHTML += ` 
-            <div id="${doc.id}" class="w-[20vw] bg-white rounded-lg border border-gray-200 shadow-md hover:shadow-lg transition-shadow duration-100">
-                <a href="#">
-                    <img class="rounded-t-lg w-full h-56 object-cover" src="${productdata.ProductImage}" alt="Product Image">
-                </a>
+            productcards.innerHTML += `
+            <div id="${docSnap.id}" class="w-[20vw] bg-white rounded-lg shadow-md">
+                <img class="rounded-t-lg w-full h-56 object-cover" src="${productdata.ProductImage}">
                 <div class="p-4">
-                    <a href="#">
-                        <h5 class="text-lg font-semibold tracking-tight text-gray-900 hover:text-blue-600">
-                            ${productdata.ProductName}
-                        </h5>
-                    </a>
-
-                    <div class="flex items-center justify-between">
-                        <span class="text-2xl font-bold text-gray-900">${productdata.ProductPrice}$</span>
-                    </div>
+                    <h5 class="text-lg font-semibold">${productdata.ProductName}</h5>
+                    <span class="text-2xl font-bold">${productdata.ProductPrice}$</span>
                     <div class="flex gap-2 mt-3">
-                        <button onclick="edit('${doc.id}')" id='updatebtn' class="flex-1 text-white bg-blue-500 hover:bg-blue-600 font-medium rounded-lg text-sm px-4 py-2">
-                            Edit
-                        </button>
-                        <button onclick="del('${doc.id}')" class="flex-1 text-white bg-red-600 hover:bg-red-700 font-medium rounded-lg text-sm px-4 py-2">
-                            Delete
-                        </button>
+                        <button onclick="edit('${docSnap.id}')" class="flex-1 bg-blue-500 text-white rounded-lg px-4 py-2">Edit</button>
+                        <button onclick="del('${docSnap.id}')" class="flex-1 bg-red-600 text-white rounded-lg px-4 py-2">Delete</button>
                     </div>
                 </div>
-            </div>
-            `;
+            </div>`;
         }
     });
 }
 
-
-async function del(e) {
-
-    await deleteDoc(doc(db, "Product", String(e)))
-        .then(() => {
-            window.location.reload();
-        })
-
+// ========================== DELETE PRODUCT ==========================
+async function del(id) {
+    await deleteDoc(doc(db, "Product", id));
+    window.location.reload();
 }
+window.del = del;
 
-window.del = del
+// ========================== EDIT PRODUCT ==========================
 var editId;
-
 async function edit(eid) {
     editId = eid;
     document.getElementById('editModal').style.display = 'flex';
-
-    let editName = document.getElementById('editName');
-    let editDetails = document.getElementById('editDetails');
-    let editPrice = document.getElementById('editPrice');
-    let editImage = document.getElementById('editImage');
-
-    const docRef = doc(db, "Product", eid);
-    const docSnap = await getDoc(docRef);
-
+    const docSnap = await getDoc(doc(db, "Product", eid));
     if (docSnap.exists()) {
-        let productdata = docSnap.data();
-        editName.value = productdata.ProductName;
-        editDetails.value = productdata.ProductDetails;
-        editPrice.value = productdata.ProductPrice;
-        editImage.value = productdata.ProductImage;
-    } else {
-        alert("No such product found!");
+        let data = docSnap.data();
+        document.getElementById('editName').value = data.ProductName;
+        document.getElementById('editDetails').value = data.ProductDetails;
+        document.getElementById('editPrice').value = data.ProductPrice;
+        document.getElementById('editImage').value = data.ProductImage;
     }
 }
-window.edit = edit
-// update data
+window.edit = edit;
+
 let Updatebtn = document.getElementById('Updateproduct');
 if (Updatebtn) {
-    let editName = document.getElementById('editName');
-    let editDetails = document.getElementById('editDetails');
-    let editPrice = document.getElementById('editPrice');
-    let editImage = document.getElementById('editImage');
-
     Updatebtn.addEventListener('click', async () => {
-
-        const docRef = doc(db, "Product", editId);
-
-        await updateDoc(docRef, {
-            ProductName: editName.value.trim(),
-            ProductDetails: editDetails.value.trim(),
-            ProductPrice: editPrice.value.trim(),
-            ProductImage: editImage.value.trim()
+        await updateDoc(doc(db, "Product", editId), {
+            ProductName: document.getElementById('editName').value.trim(),
+            ProductDetails: document.getElementById('editDetails').value.trim(),
+            ProductPrice: document.getElementById('editPrice').value.trim(),
+            ProductImage: document.getElementById('editImage').value.trim()
         });
-
         alert("Product updated successfully!");
         window.location.reload();
     });
 }
 
-let editformclose = document.getElementById('editformclose')
+let editformclose = document.getElementById('editformclose');
 if (editformclose) {
-
     editformclose.addEventListener('click', () => {
-        document.getElementById('editModal').style.display = 'none'
-    })
-
+        document.getElementById('editModal').style.display = 'none';
+    });
 }
-let productcount = 0
+
+// ========================== ADD TO CART ==========================
 window.addtocard = async function (id) {
-    let cartCount = document.getElementById('cartCount')
-    cartCount.innerHTML = productcount + 1
-    console.log("Added to cart:", id);
+    
     try {
-        const docRef = await addDoc(collection(db, "addtocart"), {
-            productid: id,
-            UserId
-        });
-        alert('Product add successful');
-        // window.location.reload();
+        await addDoc(collection(db, "addtocart"), { productid: id, UserId });
+        alert('Product added to cart');
+        window.location.reload();
     } catch (e) {
-        alert(`Error adding document: ${e}`);
+        alert(`Error: ${e}`);
     }
 };
-// cart item
-// let cartitem = document.getElementById('cartitem')
-// if (cartitem) {
-//     let cartuserid;
-//     let cartproductid;
-//     const querySnapshot = await getDocs(collection(db, "addtocart"));
-//     querySnapshot.forEach((doc) => {
-//         let productdata = doc.data();
-//         cartuserid = productdata.UserId
-//         cartproductid = productdata.productid
+// ========================== SHOW CART ITEMS ==========================
+let cartitem = document.getElementById('cartitem');
+if (cartitem) {
+    let subtotal=0
+    const cartSnapshot = await getDocs(collection(db, "addtocart"));
+    let userCart = cartSnapshot.docs.filter(docSnap => docSnap.data().UserId === UserId);
 
-//     })
-    
-    
-//     const productget = await getDocs(collection(db, "Product"));
-//     productget.forEach((doc) => {
-//         let productdata = doc.data();
-//         if(cartuserid==UserId||cartproductid==doc.id){
+    for (let cartDoc of userCart) {
+        let productSnap = await getDoc(doc(db, "Product", cartDoc.data().productid));
+        if (productSnap.exists()) {
+            let p = productSnap.data();
+            cartitem.innerHTML += `
+            <div class="flex items-center justify-between border-b pb-4">
+                <div class="flex items-center space-x-4">
+                <img src="${p.ProductImage}" class="w-20 h-20 rounded object-cover">
+                <div>
+                <h2 class="text-lg font-semibold">${p.ProductName}</h2>
+                        <p class="text-sm font-semibold">${p.ProductPrice}$</p>
+                    </div>
+                </div>
+                <div class="flex items-center space-x-4">
+                    <input type="number" value="1" class="w-16 border rounded p-1 text-center">
+                    <button onclick="delcart('${cartDoc.id}')" class="text-red-500"><i class="fas fa-trash"></i></button>
+                    </div>
+            </div>`
+            subtotal=subtotal+Number(p.ProductPrice)
+            document.getElementById('stotal').innerHTML=subtotal
+            document.getElementById('total').innerHTML=subtotal+10 +'$'
+        }
+    }
+}
 
-//             cartitem.innerHTML = `
-//             <div class="flex items-center justify-between border-b pb-4">
-//             <div class="flex items-center space-x-4">
-//             <img src="https://images.unsplash.com/photo-1505740420928-5e560c06d30e?auto=format&fit=crop&w=150&q=80" alt="Product" class="w-20 h-20 rounded object-cover">
-//             <div>
-//             <h2 class="text-lg font-semibold text-gray-900">Wireless Headphones</h2>
-//             <p class="text-sm text-gray-500">Category: Electronics</p>
-//             <p class="text-sm text-gray-700 font-semibold">$99.00</p>
-//             </div>
-//             </div>
-//             <div class="flex items-center space-x-4">
-//             <input type="number" value="1" min="1" class="w-16 border rounded p-1 text-center">
-//             <button class="text-red-500 hover:text-red-700"><i class="fas fa-trash"></i></button>
-//             </div>
-//             </div>`
-//             }
-//     })
-// }
+// ========================== DELETE CART ITEM ==========================
+async function delcart(id) {
+    await deleteDoc(doc(db, "addtocart", id));
+    window.location.reload();
+}
+window.delcart = delcart;
+
+// let cartCount = document.getElementById('cartCount');
+// if (cartCount) cartCount.innerHTML = Number(cartCount.innerHTML || 0) + 1;
+
+
+async function updateCartCount() {
+    if (!UserId) return; // wait until we know who is logged in
+
+    const cartSnapshot = await getDocs(collection(db, "addtocart"));
+    const userCart = cartSnapshot.docs.filter(docSnap => docSnap.data().UserId === UserId);
+    
+    let cartCount = document.getElementById('cartCount');
+    if (cartCount) {
+        cartCount.innerHTML = userCart.length; // show number of items
+    }
+}
+
+// Call after auth state is confirmed
+onAuthStateChanged(auth, (user) => {
+    if (user) {
+        UserId = user.uid;
+        updateCartCount();
+    }
+});
