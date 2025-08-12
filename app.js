@@ -146,7 +146,7 @@ if (productshow) {
             </div>
             <div class="mt-4 flex justify-between">
                 <h1 class="text-sm text-gray-700">${productdata.ProductName}</h1>
-                <p class="text-sm font-medium text-gray-900">${productdata.ProductPrice}$</p>
+                <p class="text-sm font-medium text-gray-900">$${productdata.ProductPrice}</p>
             </div>
             <div class="mt-4">
                 <button onclick="addtocard('${docSnap.id}')" class="w-full bg-indigo-600 rounded-md py-2 px-4 text-white">
@@ -169,7 +169,7 @@ if (productcards) {
                 <img class="rounded-t-lg w-full h-56 object-cover" src="${productdata.ProductImage}">
                 <div class="p-4">
                     <h5 class="text-lg font-semibold">${productdata.ProductName}</h5>
-                    <span class="text-2xl font-bold">${productdata.ProductPrice}$</span>
+                    <span class="text-2xl font-bold">$${productdata.ProductPrice}</span>
                     <div class="flex gap-2 mt-3">
                         <button onclick="edit('${docSnap.id}')" class="flex-1 bg-blue-500 text-white rounded-lg px-4 py-2">Edit</button>
                         <button onclick="del('${docSnap.id}')" class="flex-1 bg-red-600 text-white rounded-lg px-4 py-2">Delete</button>
@@ -256,7 +256,7 @@ if (cartitem) {
                     <img src="${p.ProductImage}" class="w-20 h-20 rounded object-cover">
                     <div>
                         <h2 class="text-lg font-semibold">${p.ProductName}</h2>
-                        <p class="text-sm font-semibold">${p.ProductPrice}$</p>
+                        <p class="text-sm font-semibold">$${p.ProductPrice}</p>
                     </div>
                 </div>
                 <div class="flex items-center space-x-4">
@@ -265,8 +265,9 @@ if (cartitem) {
                 </div>
             </div>`;
             subtotal += Number(p.ProductPrice);
-            document.getElementById('stotal').innerHTML = subtotal + "$";
-            document.getElementById('total').innerHTML = subtotal + 10 + '$';
+            document.getElementById('stotal').innerHTML = "$"+ subtotal ;
+            subtotal=subtotal + 10
+            document.getElementById('total').innerHTML = '$'+ subtotal   ;
         }
     }
 }
