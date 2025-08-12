@@ -1,22 +1,10 @@
 import { initializeApp } from "https://www.gstatic.com/firebasejs/12.1.0/firebase-app.js";
-import { 
-    getAuth, 
-    createUserWithEmailAndPassword, 
-    signInWithEmailAndPassword, 
-    onAuthStateChanged, 
-    signOut, 
-    GoogleAuthProvider, 
-    signInWithPopup 
+import {
+    getAuth, createUserWithEmailAndPassword, signInWithEmailAndPassword,
+    onAuthStateChanged, signOut, GoogleAuthProvider, signInWithPopup
 } from "https://www.gstatic.com/firebasejs/12.1.0/firebase-auth.js";
-import { 
-    getFirestore, 
-    collection, 
-    addDoc, 
-    getDoc, 
-    getDocs, 
-    doc, 
-    updateDoc, 
-    deleteDoc 
+import {
+    getFirestore, collection, addDoc, getDoc, getDocs, doc, updateDoc, deleteDoc
 } from "https://www.gstatic.com/firebasejs/12.1.0/firebase-firestore.js";
 
 // Firebase config
@@ -46,10 +34,10 @@ if (getsbtn) {
 
         createUserWithEmailAndPassword(auth, email, password)
             .then(() => {
-                alert('Signup Successful');
-                window.location.href = 'login.html';
+                Swal.fire({ icon: 'success', title: 'Signup Successful', timer: 2000, showConfirmButton: false });
+                setTimeout(() => window.location.href = 'login.html', 2000);
             })
-            .catch((error) => alert(error.message));
+            .catch((error) => Swal.fire('Error', error.message, 'error'));
     });
 }
 
@@ -62,10 +50,10 @@ if (getlbtn) {
 
         signInWithEmailAndPassword(auth, email, password)
             .then(() => {
-                alert('Login Successful');
-                window.location.href = 'index.html';
+                Swal.fire({ icon: 'success', title: 'Login Successful', timer: 2000, showConfirmButton: false });
+                setTimeout(() => window.location.href = 'index.html', 2000);
             })
-            .catch((error) => alert(error.message));
+            .catch((error) => Swal.fire('Error', error.message, 'error'));
     });
 }
 
@@ -90,10 +78,10 @@ if (logout) {
     logout.addEventListener('click', () => {
         signOut(auth)
             .then(() => {
-                alert("User signed out successfully.");
-                window.location.href = 'index.html';
+                Swal.fire({ icon: 'success', title: 'Signed Out', timer: 2000, showConfirmButton: false });
+                setTimeout(() => window.location.href = 'index.html', 2000);
             })
-            .catch((error) => console.error("Error signing out:", error));
+            .catch((error) => Swal.fire('Error', error.message, 'error'));
     });
 }
 
@@ -105,10 +93,10 @@ if (googlesignup) {
         try {
             const result = await signInWithPopup(auth, provider);
             const user = result.user;
-            alert(`Welcome ${user.displayName}!`);
-            window.location.href = 'index.html';
+            Swal.fire({ icon: 'success', title: `Welcome ${user.displayName}!`, timer: 2000, showConfirmButton: false });
+            setTimeout(() => window.location.href = 'index.html', 2000);
         } catch (error) {
-            alert(error.message);
+            Swal.fire('Error', error.message, 'error');
         }
     });
 }
@@ -133,20 +121,14 @@ if (getAddproductbtn) {
 
         if (ProductName && ProductDetails && ProductPrice && ProductImage) {
             try {
-                await addDoc(collection(db, "Product"), {
-                    UserId,
-                    ProductName,
-                    ProductDetails,
-                    ProductPrice,
-                    ProductImage,
-                });
-                alert('Product added successfully');
-                window.location.reload();
+                await addDoc(collection(db, "Product"), { UserId, ProductName, ProductDetails, ProductPrice, ProductImage });
+                Swal.fire({ icon: 'success', title: 'Product added successfully', timer: 2000, showConfirmButton: false });
+                setTimeout(() => window.location.reload(), 2000);
             } catch (e) {
-                alert(`Error adding product: ${e}`);
+                Swal.fire('Error', e, 'error');
             }
         } else {
-            alert('Please fill all fields');
+            Swal.fire('Warning', 'Please fill all fields', 'warning');
         }
     });
 }
@@ -175,7 +157,7 @@ if (productshow) {
     });
 }
 
-// ========================== SHOW USER PRODUCTS (DASHBOARD) ==========================
+// ========================== SHOW USER PRODUCTS ==========================
 let productcards = document.getElementById('productcards');
 if (productcards) {
     const querySnapshot = await getDocs(collection(db, "Product"));
@@ -200,8 +182,12 @@ if (productcards) {
 
 // ========================== DELETE PRODUCT ==========================
 async function del(id) {
-    await deleteDoc(doc(db, "Product", id));
-    window.location.reload();
+    const confirm = await Swal.fire({ title: 'Are you sure?', text: 'This will delete the product permanently.', icon: 'warning', showCancelButton: true, confirmButtonColor: '#d33', confirmButtonText: 'Yes, delete it!' });
+    if (confirm.isConfirmed) {
+        await deleteDoc(doc(db, "Product", id));
+        Swal.fire({ icon: 'success', title: 'Product deleted', timer: 2000, showConfirmButton: false });
+        setTimeout(() => window.location.reload(), 2000);
+    }
 }
 window.del = del;
 
@@ -230,8 +216,8 @@ if (Updatebtn) {
             ProductPrice: document.getElementById('editPrice').value.trim(),
             ProductImage: document.getElementById('editImage').value.trim()
         });
-        alert("Product updated successfully!");
-        window.location.reload();
+        Swal.fire({ icon: 'success', title: 'Product updated successfully', timer: 2000, showConfirmButton: false });
+        setTimeout(() => window.location.reload(), 2000);
     });
 }
 
@@ -244,19 +230,19 @@ if (editformclose) {
 
 // ========================== ADD TO CART ==========================
 window.addtocard = async function (id) {
-    
     try {
         await addDoc(collection(db, "addtocart"), { productid: id, UserId });
-        alert('Product added to cart');
-        window.location.reload();
+        Swal.fire({ icon: 'success', title: 'Product added to cart', timer: 2000, showConfirmButton: false });
+        setTimeout(() => window.location.reload(), 2000);
     } catch (e) {
-        alert(`Error: ${e}`);
+        Swal.fire('Error', e, 'error');
     }
 };
+
 // ========================== SHOW CART ITEMS ==========================
 let cartitem = document.getElementById('cartitem');
 if (cartitem) {
-    let subtotal=0
+    let subtotal = 0;
     const cartSnapshot = await getDocs(collection(db, "addtocart"));
     let userCart = cartSnapshot.docs.filter(docSnap => docSnap.data().UserId === UserId);
 
@@ -267,48 +253,45 @@ if (cartitem) {
             cartitem.innerHTML += `
             <div class="flex items-center justify-between border-b pb-4">
                 <div class="flex items-center space-x-4">
-                <img src="${p.ProductImage}" class="w-20 h-20 rounded object-cover">
-                <div>
-                <h2 class="text-lg font-semibold">${p.ProductName}</h2>
+                    <img src="${p.ProductImage}" class="w-20 h-20 rounded object-cover">
+                    <div>
+                        <h2 class="text-lg font-semibold">${p.ProductName}</h2>
                         <p class="text-sm font-semibold">${p.ProductPrice}$</p>
                     </div>
                 </div>
                 <div class="flex items-center space-x-4">
                     <input type="number" value="1" class="w-16 border rounded p-1 text-center">
                     <button onclick="delcart('${cartDoc.id}')" class="text-red-500"><i class="fas fa-trash"></i></button>
-                    </div>
-            </div>`
-            subtotal=subtotal+Number(p.ProductPrice)
-            document.getElementById('stotal').innerHTML=subtotal
-            document.getElementById('total').innerHTML=subtotal+10 +'$'
+                </div>
+            </div>`;
+            subtotal += Number(p.ProductPrice);
+            document.getElementById('stotal').innerHTML = subtotal + "$";
+            document.getElementById('total').innerHTML = subtotal + 10 + '$';
         }
     }
 }
 
 // ========================== DELETE CART ITEM ==========================
 async function delcart(id) {
-    await deleteDoc(doc(db, "addtocart", id));
-    window.location.reload();
+    const confirm = await Swal.fire({ title: 'Remove item?', text: 'This item will be removed from your cart.', icon: 'warning', showCancelButton: true, confirmButtonColor: '#d33', confirmButtonText: 'Yes, remove it!' });
+    if (confirm.isConfirmed) {
+        await deleteDoc(doc(db, "addtocart", id));
+        Swal.fire({ icon: 'success', title: 'Item removed', timer: 2000, showConfirmButton: false });
+        setTimeout(() => window.location.reload(), 2000);
+    }
 }
 window.delcart = delcart;
 
-// let cartCount = document.getElementById('cartCount');
-// if (cartCount) cartCount.innerHTML = Number(cartCount.innerHTML || 0) + 1;
-
-
+// ========================== CART COUNT ==========================
 async function updateCartCount() {
-    if (!UserId) return; // wait until we know who is logged in
-
+    if (!UserId) return;
     const cartSnapshot = await getDocs(collection(db, "addtocart"));
     const userCart = cartSnapshot.docs.filter(docSnap => docSnap.data().UserId === UserId);
-    
     let cartCount = document.getElementById('cartCount');
     if (cartCount) {
-        cartCount.innerHTML = userCart.length; // show number of items
+        cartCount.innerHTML = userCart.length;
     }
 }
-
-// Call after auth state is confirmed
 onAuthStateChanged(auth, (user) => {
     if (user) {
         UserId = user.uid;
