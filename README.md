@@ -2,7 +2,11 @@
 
 A fully functional front-end e‑commerce store built using HTML, JavaScript, Tailwind CSS, and Firebase backend services.
 
-##  Table of Contents
+<p align="center">
+  <img src="UI.png" alt="Project Preview" width="700"/>
+</p>
+
+## Table of Contents
 
 - [Overview](#overview)  
 - [Technologies](#technologies)  
