@@ -229,13 +229,20 @@ if (editformclose) {
 }
 
 // ========================== ADD TO CART ==========================
+
 window.addtocard = async function (id) {
-    try {
-        await addDoc(collection(db, "addtocart"), { productid: id, UserId });
-        Swal.fire({ icon: 'success', title: 'Product added to cart', timer: 2000, showConfirmButton: false });
-        setTimeout(() => window.location.reload(), 2000);
-    } catch (e) {
-        Swal.fire('Error', e, 'error');
+    if (UserId == null) {
+        alert('User Not Sign In')
+    } else {
+
+
+        try {
+            await addDoc(collection(db, "addtocart"), { productid: id, UserId });
+            Swal.fire({ icon: 'success', title: 'Product added to cart', timer: 2000, showConfirmButton: false });
+            setTimeout(() => window.location.reload(), 2000);
+        } catch (e) {
+            Swal.fire('Error', e, 'error');
+        }
     }
 };
 
@@ -265,9 +272,9 @@ if (cartitem) {
                 </div>
             </div>`;
             subtotal += Number(p.ProductPrice);
-            document.getElementById('stotal').innerHTML = "$"+ subtotal ;
-            subtotal=subtotal + 10
-            document.getElementById('total').innerHTML = '$'+ subtotal   ;
+            document.getElementById('stotal').innerHTML = "$" + subtotal;
+            subtotal = subtotal + 10
+            document.getElementById('total').innerHTML = '$' + subtotal;
         }
     }
 }
